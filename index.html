@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your Name — Digital Designer & Developer</title>
+<meta name="description" content="Portfolio of Your Name: web development, UI/UX design and motion. Placeholder content, edit the DATA object.">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #05060a;
+  --fg: #f4f5fa;
+  --mut: #9aa0b4;
+  --a: #4f7cff;
+  --b: #8b5cf6;
+  --line: rgba(255,255,255,.1);
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top,0px);
+  padding-bottom: env(safe-area-inset-bottom,0px);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Bricolage Grotesque', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+}
+
+.glass {
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 1.25rem;
+}
+
+.grad {
+  background: linear-gradient(110deg,var(--a),var(--b));
+}
+
+.glow {
+  box-shadow: 0 0 60px -12px rgba(111,110,255,.55);
+}
+
+.orb {
+  background: radial-gradient(circle at 30% 30%,#7aa2ff,#6d4df2 55%,#1a1245);
+  animation: float 9s ease-in-out infinite;
+}
+
+@keyframes float {
+  50% {
+    transform: translateY(-18px) rotate(3deg);
+  }
+}
+
+.rise {
+  animation: rise .9s cubic-bezier(.2,.7,.2,1) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+}
+
+.card {
+  transition: transform .35s,border-color .35s,box-shadow .35s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(124,130,255,.6);
+  box-shadow: 0 20px 50px -20px rgba(111,110,255,.6);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #8fb0ff;
+  outline-offset: 3px;
+}
+
+#cursor {
+  position: fixed;
+  width: 340px;
+  height: 340px;
+  margin: -170px 0 0 -170px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle,rgba(111,110,255,.14),transparent 65%);
+  z-index: 0;
+  transition: transform .15s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  #cursor {
+    display: none;
+  }
+}
+</style>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2305060a'/%3E%3Cpath d='M20 44V20h14a8 8 0 010 16H20' fill='none' stroke='%238b5cf6' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+
+<body>
+<div id="cursor" aria-hidden="true"></div>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ===== EDIT YOUR CONTENT HERE. Everything below is a placeholder. ===== */
+const DATA = {
+  name: "Shajeha Kamran",
+  role: "Designer & Developer",
+  email: "shajeehakamran80@gmail.com",
+
+  // Add your form service endpoint here to enable submissions.
+  formEndpoint: "",
+
+  socials: [
+    { label: "GitHub", href: "https://github.com/" },
+    { label: "LinkedIn", href: "https://linkedin.com/" },
+    { label: "X", href: "https://x.com/" },
+  ],
+
+  intro: "I’m a passionate web developer who builds modern, responsive, and user-friendly websites. I help my clients bring their ideas to life, strengthen their online presence, and grow their businesses through clean design, smooth functionality, and effective digital solutions..",
+
+  about: [
+    "I’m a web developer passionate about building modern, responsive websites and creating user-friendly digital experiences that help clients achieve their goals.",
+    "I care about clean design and quality work, and I’m excited to build creative websites that bring ideas to life.",
+  ],
+
+  stats: [
+    { v: "10", l: "Projects completed" },
+    { v: "01", l: "Years of experience" },
+    { v: "09", l: "Happy clients" },
+  ],
+
+  skills: [
+    { t: "Web Development", i: ["Skill one", "Skill two", "Skill three"] },
+    { t: "UI/UX Design", i: ["Figma", "Wireframing", "Prototyping"] },
+    { t: "Design & Creativity", i: ["Creative Thinking", "Visual Design"] },
+    { t: "AI Tools & Automation", i: ["ChatGPT", "Workflow Automation"] },
+    { t: "Video & Motion", i: ["Video Editing", "AI Video Generation"] },
+  ],
+
+  projects: [
+  {
+    title: "Personal Portfolio Website",
+    cat: "Web Development",
+    hue: 225,
+    desc: "A modern portfolio website showcasing my skills, projects, and professional background.",
+    tools: ["HTML", "CSS", "JavaScript"],
+    problem: "Needed a professional online presence to showcase my work.",
+    process: "Designed a clean layout with responsive sections and smooth navigation.",
+    solution: "Built a modern, user-friendly portfolio website.",
+    results: "Created a professional platform to present my skills and attract clients."
+  },
+    {
+  title: "Modern Brand & UI Design",
+  cat: "UI/UX Design",
+  hue: 265,
+  desc: "A clean, modern interface designed to deliver a smooth and engaging user experience.",
+  tools: ["Figma", "UI/UX Design"],
+  problem: "Needed a visually appealing and user-friendly digital identity.",
+  process: "Created wireframes, explored layouts, and refined the visual design.",
+  solution: "Designed an intuitive interface with consistent branding and clean visuals.",
+  results: "Developed a polished design that improves usability and brand presentation."
+},
+    {
+  title: "AI Cinematic CEO Video",
+  cat: "AI Video & Motion",
+  hue: 290,
+  desc: "A cinematic AI-generated video featuring a confident CEO arriving at a luxury corporate headquarters.",
+  tools: ["AI Video Generation", "Prompt Engineering"],
+  problem: "Creating a visually striking and professional cinematic scene.",
+  process: "Developed detailed prompts for character design, camera movement, lighting, and storytelling.",
+  solution: "Created a dramatic CEO entrance with polished visuals and cinematic motion.",
+  results: "Produced an engaging AI video concept with a premium corporate aesthetic."
+},
+  ],
+
+  showExperience: true,
+
+ experience: [
+  {
+    when: "2025 – Present",
+    what: "Web Developer, Freelance",
+    note: "Building responsive websites and creating modern, user-friendly digital experiences."
+  },
+  {
+    when: "2025 – Present",
+    what: "AI & UI/UX Design, Personal Projects",
+    note: "Exploring AI tools, UI/UX design, and creative digital solutions."
+  },
+  ],
+
+  testimonials: [
+  {
+    q: "Delivered a clean, modern design with great attention to detail. The final result looks professional and works smoothly.",
+    by: "Client, Web Development Project"
+  },
+  {
+    q: "Creative, detail-oriented, and committed to quality. Great at turning ideas into engaging digital experiences.",
+    by: "Client, Design Project"
+  },
+],
+};
+/* ======================================================================= */
+
+const NAV = ["Home", "About", "Skills", "Projects", "Contact"];
+
+const Section = ({ id, title, children, className = "" }) => (
+  <section
+    id={id}
+    className={
+      "relative z-10 mx-auto max-w-6xl px-6 py-24 md:py-32 " +
+      className
+    }
+  >
+    {title && (
+      <h2 className="mb-12 max-w-3xl text-4xl font-extrabold tracking-tight md:text-6xl">
+        {title}
+      </h2>
+    )}
+    {children}
+  </section>
+);
+
+const Btn = ({ href, onClick, primary, children }) => {
+  const c =
+    "inline-flex items-center justify-center rounded-full px-7 py-3.5 text-base font-semibold transition hover:scale-[1.04] " +
+    (primary
+      ? "grad text-white glow"
+      : "glass text-white hover:border-white/40");
+
+  return href
+    ? <a href={href} className={c}>{children}</a>
+    : <button onClick={onClick} className={c}>{children}</button>;
+};
+
+const Icon = ({ d }) => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d={d} />
+  </svg>
+);
+
+function Nav() {
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("home");
+
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      es => es.forEach(
+        e => e.isIntersecting && setActive(e.target.id)
+      ),
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+
+    NAV.forEach(n => {
+      const el = document.getElementById(n.toLowerCase());
+      el && io.observe(el);
+    });
+
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <header
+      className="sticky top-0 z-40"
+      style={{ paddingTop: "env(safe-area-inset-top,0px)" }}
+    >
+      <nav
+        aria-label="Main"
+        className="glass mx-auto mt-3 flex max-w-6xl items-center justify-between px-5 py-3"
+        style={{
+          borderRadius: "999px",
+          width: "calc(100% - 1.5rem)"
+        }}
+      >
+        <a href="#home" className="text-lg font-extrabold">
+          {DATA.name}
+        </a>
+
+        <ul className="hidden gap-1 md:flex">
+          {NAV.map(n => (
+            <li key={n}>
+              <a
+                href={"#" + n.toLowerCase()}
+                aria-current={
+                  active === n.toLowerCase() ? "true" : undefined
+                }
+                className={
+                  "rounded-full px-4 py-1.5 text-sm transition " +
+                  (active === n.toLowerCase()
+                    ? "bg-white/10 text-white"
+                    : "text-[var(--mut)] hover:text-white")
+                }
+              >
+                {n}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <button
+          className="md:hidden"
+          aria-label="Toggle menu"
+          aria-expanded={open}
+          onClick={() => setOpen(!open)}
+        >
+          <Icon
+            d={
+              open
+                ? "M6 6l12 12M18 6L6 18"
+                : "M4 7h16M4 12h16M4 17h16"
+            }
+          />
+        </button>
+      </nav>
+
+      {open && (
+        <ul className="glass mx-3 mt-2 p-3 md:hidden">
+          {NAV.map(n => (
+            <li key={n}>
+              <a
+                onClick={() => setOpen(false)}
+                href={"#" + n.toLowerCase()}
+                className="block rounded-xl px-4 py-3 text-lg hover:bg-white/10"
+              >
+                {n}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </header>
+  );
+}
+
+function Hero() {
+  return (
+    <section
+      id="home"
+      className="relative z-10 mx-auto grid min-h-[92vh] max-w-6xl items-center gap-10 px-6 pb-16 pt-10 md:grid-cols-[1.4fr_1fr]"
+    >
+      <div>
+        <p
+          className="glass rise mb-6 inline-flex items-center gap-2 px-4 py-1.5 text-sm"
+          style={{ borderRadius: "999px" }}
+        >
+          <span
+            className="h-2 w-2 rounded-full bg-emerald-400"
+            aria-hidden="true"
+          />
+          Available for Projects
+        </p>
+
+        <h1
+          className="rise text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl md:text-7xl"
+          style={{ animationDelay: ".1s" }}
+        >
+          Building Digital Experiences That Stand Out.
+        </h1>
+
+        <p
+          className="rise mt-6 max-w-xl text-lg text-[var(--mut)]"
+          style={{ animationDelay: ".25s" }}
+        >
+          {DATA.intro}
+        </p>
+
+        <div
+          className="rise mt-9 flex flex-wrap gap-4"
+          style={{ animationDelay: ".4s" }}
+        >
+          <Btn primary href="#projects">Explore My Work</Btn>
+          <Btn href="#contact">Let’s Talk</Btn>
+        </div>
+      </div>
+
+      <div
+        className="relative mx-auto aspect-square w-full max-w-sm"
+        role="img"
+        aria-label="Profile image placeholder"
+      >
+        <div className="orb glow absolute inset-6 rounded-full" />
+        <div
+          className="glass absolute inset-0 grid place-items-center text-6xl font-extrabold"
+          style={{
+            borderRadius: "50%",
+            background: "transparent"
+          }}
+        >
+          {DATA.name.split(" ").map(w => w[0]).join("")}
+        </div>
+      </div>
+
+      <a
+        href="#about"
+        aria-label="Scroll to About"
+        className="absolute bottom-4 left-6 flex items-center gap-3 text-sm text-[var(--mut)] hover:text-white"
+      >
+        <span className="h-10 w-6 rounded-full border border-white/30 p-1">
+          <span
+            className="block h-2 w-full rounded-full bg-white/70"
+            style={{
+              animation: "rise 1.4s ease-in-out infinite alternate"
+            }}
+          />
+        </span>
+        Scroll
+      </a>
+    </section>
+  );
+}
+
+const About = () => (
+  <Section id="about" title="A bit about me.">
+    <div className="grid gap-12 md:grid-cols-[1fr_1.3fr]">
+      <div
+        className="glass aspect-[4/5] max-w-sm overflow-hidden"
+        role="img"
+        aria-label="Photo placeholder"
+      >
+        <div className="grid h-full place-items-center overflow-hidden">
+  <img
+    src="/profile.png"
+    alt="My Profile"
+    className="h-full w-full object-cover"
+  />
+</div>
+      </div>
+
+      <div>
+        {DATA.about.map((p, i) => (
+          <p
+            key={i}
+            className="mb-5 max-w-xl text-lg text-[var(--mut)]"
+          >
+            {p}
+          </p>
+        ))}
+
+        <dl className="mt-10 grid grid-cols-3 gap-4">
+          {DATA.stats.map(s => (
+            <div key={s.l} className="glass p-5">
+              <dd className="order-1 text-4xl font-extrabold">
+                {s.v}
+              </dd>
+              <dt className="text-sm text-[var(--mut)]">{s.l}</dt>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </Section>
+);
+
+const Skills = () => (
+  <Section id="skills" title="What I do best.">
+    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {DATA.skills.map(s => (
+        <div key={s.t} className="glass card p-7">
+          <h3 className="mb-4 text-xl font-semibold">{s.t}</h3>
+          <ul className="flex flex-wrap gap-2">
+            {s.i.map(x => (
+              <li
+                key={x}
+                className="rounded-full border border-white/15 px-3 py-1 text-sm text-[var(--mut)]"
+              >
+                {x}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </Section>
+);
+
+function Modal({ p, onClose }) {
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current.focus();
+
+    const k = e => e.key === "Escape" && onClose();
+
+    document.addEventListener("keydown", k);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", k);
+      document.body.style.overflow = "";
+    };
+  }, []);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={p.title}
+        tabIndex="-1"
+        ref={ref}
+        onClick={e => e.stopPropagation()}
+        className="glass rise max-h-[90vh] w-full max-w-2xl overflow-y-auto p-8"
+        style={{ background: "#0b0d16" }}
+      >
+        <div
+          className="mb-6 h-48 rounded-2xl"
+          style={{
+            background: `linear-gradient(135deg,hsl(${p.hue} 90% 60% / .55),hsl(${p.hue + 40} 80% 30% / .3))`
+          }}
+          role="img"
+          aria-label="Project visual placeholder"
+        />
+
+        <p className="text-sm text-[var(--mut)]">
+          {p.cat} (placeholder project)
+        </p>
+
+        <h3 className="mb-6 text-3xl font-extrabold">
+          {p.title}
+        </h3>
+
+        {[
+          ["Problem", p.problem],
+          ["Process", p.process],
+          ["Solution", p.solution],
+          ["Results", p.results]
+        ].map(([h, t]) => (
+          <div key={h} className="mb-5">
+            <h4 className="font-semibold">{h}</h4>
+            <p className="text-[var(--mut)]">{t}</p>
+          </div>
+        ))}
+
+        <Btn onClick={onClose}>Close</Btn>
+      </div>
+    </div>
+  );
+}
+
+function Projects() {
+  const [sel, setSel] = useState(null);
+
+  return (
+    <Section id="projects" title="Selected work.">
+      <p className="-mt-6 mb-10 text-[var(--mut)]">
+        All projects below are labeled placeholders.
+      </p>
+
+      <div className="grid gap-6 md:grid-cols-3">
+        {DATA.projects.map(p => (
+          <article key={p.title} className="glass card overflow-hidden">
+            <div
+              className="h-48"
+              style={{
+                background: `linear-gradient(135deg,hsl(${p.hue} 90% 60% / .55),hsl(${p.hue + 40} 80% 30% / .3))`
+              }}
+              role="img"
+              aria-label="Thumbnail placeholder"
+            />
+
+            <div className="p-6">
+              <p className="text-sm text-[var(--mut)]">{p.cat}</p>
+
+              <h3 className="mb-2 text-xl font-semibold">
+                {p.title}
+              </h3>
+
+              <p className="mb-4 text-[var(--mut)]">{p.desc}</p>
+
+              <p className="mb-5 text-sm">
+                {p.tools.join(", ")}
+              </p>
+
+              <button
+                onClick={() => setSel(p)}
+                className="font-semibold text-[#8fb0ff] hover:text-white"
+              >
+                View Project
+              </button>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      {sel && (
+        <Modal p={sel} onClose={() => setSel(null)} />
+      )}
+    </Section>
+  );
+}
+
+const Experience = () => (
+  <Section id="experience" title="Experience & education.">
+    <ol className="ml-2 border-l border-white/15">
+      {DATA.experience.map((e, i) => (
+        <li key={i} className="relative pb-10 pl-8">
+          <span
+            className="grad absolute -left-[7px] top-2 h-3 w-3 rounded-full"
+            aria-hidden="true"
+          />
+
+          <p className="text-sm text-[var(--mut)]">{e.when}</p>
+
+          <h3 className="text-xl font-semibold">{e.what}</h3>
+
+          <p className="max-w-xl text-[var(--mut)]">{e.note}</p>
+        </li>
+      ))}
+    </ol>
+  </Section>
+);
+
+const Testimonials = () => (
+  <Section id="testimonials" title="Kind words.">
+    <div className="grid gap-5 md:grid-cols-2">
+      {DATA.testimonials.map((t, i) => (
+        <figure key={i} className="glass card p-8">
+          <blockquote className="mb-5 text-xl">
+            “{t.q}”
+          </blockquote>
+
+          <figcaption className="text-sm text-[var(--mut)]">
+            {t.by} (placeholder)
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </Section>
+);
+
+function Contact() {
+  const [f, setF] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+
+  const [err, setErr] = useState({});
+  const [st, setSt] = useState({ s: "idle", m: "" });
+
+  const set = k => e => setF({
+    ...f,
+    [k]: e.target.value
+  });
+
+  const submit = async e => {
+    e.preventDefault();
+
+    const x = {};
+
+    if (!f.name.trim()) {
+      x.name = "Enter your name.";
+    }
+
+    if (!/^\S+@\S+\.\S+$/.test(f.email)) {
+      x.email = "Enter a valid email address.";
+    }
+
+    if (!f.subject.trim()) {
+      x.subject = "Enter a subject.";
+    }
+
+    if (f.message.trim().length < 10) {
+      x.message = "Write at least 10 characters.";
+    }
+
+    setErr(x);
+
+    if (Object.keys(x).length) return;
+
+    if (!DATA.formEndpoint) {
+      setSt({
+        s: "error",
+        m: "The form isn’t connected to an email service yet, so nothing was sent. Use the email link instead."
+      });
+      return;
+    }
+
+    setSt({ s: "loading", m: "" });
+
+    try {
+      const r = await fetch(DATA.formEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify(f)
+      });
+
+      if (!r.ok) throw new Error();
+
+      setSt({
+        s: "ok",
+        m: "Message sent. I’ll reply soon."
+      });
+
+      setF({
+        name: "",
+        email: "",
+        subject: "",
+        message: ""
+      });
+    } catch {
+      setSt({
+        s: "error",
+        m: "Sending failed. Try again or use the email link."
+      });
+    }
+  };
+
+  const field = (k, label, props = {}) => (
+    <div>
+      <label
+        htmlFor={k}
+        className="mb-1 block text-sm text-[var(--mut)]"
+      >
+        {label}
+      </label>
+
+      {k === "message" ? (
+        <textarea
+          id={k}
+          rows="5"
+          value={f[k]}
+          onChange={set(k)}
+          aria-invalid={!!err[k]}
+          aria-describedby={err[k] ? k + "-e" : undefined}
+          className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white"
+        />
+      ) : (
+        <input
+          id={k}
+          value={f[k]}
+          onChange={set(k)}
+          aria-invalid={!!err[k]}
+          aria-describedby={err[k] ? k + "-e" : undefined}
+          className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white"
+          {...props}
+        />
+      )}
+
+      {err[k] && (
+        <p id={k + "-e"} className="mt-1 text-sm text-red-400">
+          {err[k]}
+        </p>
+      )}
+    </div>
+  );
+
+  return (
+    <Section
+      id="contact"
+      title="Have a Project in Mind? Let's Make It Happen."
+    >
+      <div className="grid gap-10 md:grid-cols-[1fr_1.4fr]">
+        <div>
+          <Btn primary href={"mailto:" + DATA.email}>
+            Email me
+          </Btn>
+
+          <p className="mt-6 text-[var(--mut)]">
+            {DATA.email}
+          </p>
+
+          <ul className="mt-4 flex flex-wrap gap-4">
+            {DATA.socials.map(s => (
+              <li key={s.label}>
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-white/30 hover:decoration-white"
+                >
+                  {s.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <form
+          onSubmit={submit}
+          noValidate
+          className="glass grid gap-4 p-7"
+        >
+          <div className="grid gap-4 sm:grid-cols-2">
+            {field("name", "Name", {
+              autoComplete: "name"
+            })}
+
+            {field("email", "Email", {
+              type: "email",
+              autoComplete: "email"
+            })}
+          </div>
+
+          {field("subject", "Subject")}
+          {field("message", "Message")}
+
+          <button
+            disabled={st.s === "loading"}
+            className="grad glow rounded-full px-7 py-3.5 font-semibold text-white disabled:opacity-60"
+          >
+            {st.s === "loading" ? "Sending…" : "Send message"}
+          </button>
+
+          <p
+            role="status"
+            aria-live="polite"
+            className={
+              "text-sm " +
+              (st.s === "ok"
+                ? "text-emerald-400"
+                : "text-red-400")
+            }
+          >
+            {st.m}
+          </p>
+        </form>
+      </div>
+    </Section>
+  );
+}
+
+function Footer() {
+  const [top, setTop] = useState(false);
+
+  useEffect(() => {
+    const h = () => setTop(scrollY > 700);
+
+    addEventListener("scroll", h, { passive: true });
+
+    return () => removeEventListener("scroll", h);
+  }, []);
+
+  return (
+    <footer className="relative z-10 border-t border-white/10 px-6 py-10 text-center text-sm text-[var(--mut)]">
+      <p>
+        © {new Date().getFullYear()} {DATA.name}. Built with React and Tailwind.
+      </p>
+
+      {top && (
+        <a
+          href="#home"
+          aria-label="Back to top"
+          className="glass fixed bottom-5 right-5 grid h-12 w-12 place-items-center text-white"
+          style={{ borderRadius: "50%" }}
+        >
+          <Icon d="M12 19V5M5 12l7-7 7 7" />
+        </a>
+      )}
+    </footer>
+  );
+}
+
+function App() {
+  useEffect(() => {
+    const c = document.getElementById("cursor");
+
+    const m = e => {
+      c.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+    };
+
+    if (matchMedia("(pointer:fine)").matches) {
+      addEventListener("mousemove", m);
+    }
+
+    return () => removeEventListener("mousemove", m);
+  }, []);
+
+  return (
+    <>
+      <a
+        href="#about"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded focus:bg-white focus:px-3 focus:py-2 focus:text-black"
+      >
+        Skip to content
+      </a>
+
+      <Nav />
+
+      <main>
+        <Hero />
+        <About />
+        <Skills />
+        <Projects />
+
+        {DATA.showExperience && <Experience />}
+
+        <Testimonials />
+        <Contact />
+      </main>
+
+      <Footer />
+    </>
+  );
+}
+
+ReactDOM.createRoot(
+  document.getElementById("root")
+).render(<App />);
+</script>
+</body>
+</html>
